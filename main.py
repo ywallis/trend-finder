@@ -23,15 +23,18 @@ def strong_trend(row):
 
 # Initialize unauthenticated client
 
-binance = ccxt.binance({'options': {'defaultType': 'future'}})
+exchange = ccxt.binance({'options': {'defaultType': 'future'}})
+exchange.load_markets()
 
 # Search for all tickers trading on Binance, and add them to a list if the quote asset is USDT.
 
 sym_list = []
-symbols = binance.fetch_tickers()
-print(symbols['SNT/USDT:USDT'])
+symbols = exchange.fetch_tickers()
 for ticker in symbols.items():
-    if ticker[0].endswith(':USDT'):
+
+    # Added check to ensure market is actively traded
+
+    if ticker[0].endswith(':USDT') and exchange.markets[ticker[0]]['active']:
         sym_list.append(ticker[1]['info']['symbol'])
 
 all_prices = {}
@@ -41,7 +44,7 @@ export = ['Close', 'fast', 'slow', 'trend_counter']
 # For all relevant assets trading on the target exchange, check if they have a candle history of at least 300, and check if they are above their trend.
 
 for ticker in sym_list:
-    df = pd.DataFrame(binance.fetch_ohlcv(ticker, '4h', limit=300),
+    df = pd.DataFrame(exchange.fetch_ohlcv(ticker, '4h', limit=300),
                       columns=['Time', 'Open', 'High', 'Low', 'Close', 'Volume'])
     if len(df) == 300:
         df['Time'] = pd.to_datetime(df['Time'], unit='ms')
@@ -80,7 +83,11 @@ sorted_trending_by_length = sorted(trending.items(), key=lambda x:x[1], reverse=
 trending_dict = dict(sorted_trending_by_length)
 print(sorted_trending_by_length)
 
-formatted_output = '\n'.join([f'{int(tup[1])} {tup[0]}' for tup in sorted_trending_by_length])
+formatted_trending = '\n'.join([f'{int(tup[1])} {tup[0]}' for tup in sorted_trending_by_length])
+formatted_trended = '\n'.join(trended_hard)
 
 
-send_email('Testing trend-finder', formatted_output)
+send_email('Testing trend-finder', f'Currently trending:'
+                                   f'\n{formatted_trending}'
+                                   f'\nPreviously trended:'
+                                   f'\n{trended_hard}')

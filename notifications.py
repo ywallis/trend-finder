@@ -17,4 +17,4 @@ def send_email(subject, message):
     with smtplib.SMTP('smtp.gmail.com', 587) as email_out:
         email_out.starttls()
         email_out.login(SENDER, PASSWORD)
-        email_out.sendmail(SENDER, [RECIPIENT], f"Subject:{subject} \n\n {message}")
+        email_out.sendmail(SENDER, [RECIPIENT], f"Subject:{subject} \n\n{message}")
