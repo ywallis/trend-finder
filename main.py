@@ -1,9 +1,7 @@
 import ccxt
 import pandas as pd
 import pandas_ta as ta
-import numpy as np
 import time
-from pprint import pprint
 
 from notifications import send_email
 
@@ -87,7 +85,7 @@ formatted_trending = '\n'.join([f'{int(tup[1])} {tup[0]}' for tup in sorted_tren
 formatted_trended = '\n'.join([*trended_hard])
 
 
-send_email('Testing trend-finder', f'Currently trending:'
+send_email('Trend-finder', f'Currently trending:'
                                    f'\n{formatted_trending}'
                                    f'\nPreviously trended:'
-                                   f'\n{trended_hard}')
+                                   f'\n{formatted_trended}')
