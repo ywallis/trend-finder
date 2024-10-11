@@ -14,7 +14,7 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Add the cron job (using `python`)
-RUN echo "*/5 * * * * root /usr/local/bin/python /usr/src/app/main.py" > /etc/cron.d/my-cron-job
+RUN echo "0 10,22 * * * root /usr/local/bin/python /usr/src/app/main.py" > /etc/cron.d/my-cron-job
 
 # Give execution rights to the cron job file
 RUN chmod 0644 /etc/cron.d/my-cron-job
