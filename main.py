@@ -83,4 +83,4 @@ print(sorted_trending_by_length)
 formatted_output = '\n'.join([f'{int(tup[1])} {tup[0]}' for tup in sorted_trending_by_length])
 
 
-send_email('Testing trend-finder', sorted_trending_by_length)
+send_email('Testing trend-finder', formatted_output)
