@@ -14,16 +14,10 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Add the cron job (using `python`)
-RUN echo "*/10 * * * * /usr/local/bin/python /usr/src/app/main.py >> /var/log/cron.log 2>&1" > /etc/cron.d/my-cron-job
+RUN echo "*/5 * * * * root /usr/local/bin/python /usr/src/app/main.py" > /etc/cron.d/my-cron-job
 
 # Give execution rights to the cron job file
 RUN chmod 0644 /etc/cron.d/my-cron-job
 
-# Apply the cron job to the crontab
-RUN crontab /etc/cron.d/my-cron-job
-
-# Create the log file to be used by cron
-RUN touch /var/log/cron.log
-
 # Start cron in the foreground
-CMD cron && tail -f /var/log/cron.log
+CMD ["cron", "-f"]

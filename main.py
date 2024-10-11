@@ -81,10 +81,10 @@ for ticker in all_prices.items():
 
 sorted_trending_by_length = sorted(trending.items(), key=lambda x:x[1], reverse=True)
 trending_dict = dict(sorted_trending_by_length)
-print(sorted_trending_by_length)
+print(trended_hard)
 
 formatted_trending = '\n'.join([f'{int(tup[1])} {tup[0]}' for tup in sorted_trending_by_length])
-formatted_trended = '\n'.join(trended_hard)
+formatted_trended = '\n'.join([*trended_hard])
 
 
 send_email('Testing trend-finder', f'Currently trending:'
